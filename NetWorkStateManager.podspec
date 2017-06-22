@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name         = "NetWorkState"
+  s.name         = "NetWorkStateManager"
   s.version      = "0.0.1"
   s.summary      = "Network state handle for iOS."
   s.homepage     = "https://github.com/FlameGrace/NetWorkStateManager"
