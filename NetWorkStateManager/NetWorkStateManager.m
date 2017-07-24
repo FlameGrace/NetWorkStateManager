@@ -97,4 +97,27 @@ static NSString *hostName = @"www.apple.com";
     [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
+
+- (NSString *)wifiBSSID
+{
+    if(self.netWorkState != NetWorkStateReachableViaWiFi)
+    {
+        return nil;
+    }
+    return [self getWIFIBSSID];
+}
+
+
+- (NSString *)getWIFIBSSID
+{
+    NSString *BSSID = nil;
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    for (NSString *ifnam in ifs) {
+        NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        //        NSString *str = info[@"SSID"];
+        BSSID = info[@"BSSID"];
+    }
+    return BSSID;
+}
+
 @end
