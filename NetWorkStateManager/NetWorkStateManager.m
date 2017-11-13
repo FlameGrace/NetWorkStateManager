@@ -1,15 +1,18 @@
 //
 //  NetWorkStateManager.m
-//  
+//  flamegrace@hotmail.com
 //
 //  Created by Flame Grace on 16/9/19.
-//  Copyright © 2016年 . All rights reserved.
+//  Copyright © 2016年 flamegrace@hotmail.com. All rights reserved.
 //
 
 #import "NetWorkStateManager.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
 #import <UIKit/UIKit.h>
 #import "Reachability.h"
-
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+#include <net/if.h>
 
 
 @interface NetWorkStateManager()
@@ -25,7 +28,6 @@
 @implementation NetWorkStateManager
 
 static NetWorkStateManager *shareManager = nil;
-static NSString *hostName = @"www.apple.com";
 
 
 + (instancetype)shareManager
@@ -43,7 +45,7 @@ static NSString *hostName = @"www.apple.com";
     {
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-        self.netWorkReachability = [Reachability reachabilityWithHostName:hostName];
+        self.netWorkReachability = [Reachability reachabilityForInternetConnection];
         [self getCurrentNetWorkState];
         [self.netWorkReachability startNotifier];
     }
@@ -66,7 +68,6 @@ static NSString *hostName = @"www.apple.com";
     
     NetworkStatus internetStatus = [_netWorkReachability currentReachabilityStatus];
     NetWorkState netWorkState;
-    
     switch (internetStatus) {
         case ReachableViaWiFi:
             netWorkState = NetWorkStateReachableViaWiFi;
@@ -97,7 +98,6 @@ static NSString *hostName = @"www.apple.com";
     [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
-
 - (NSString *)wifiBSSID
 {
     if(self.netWorkState != NetWorkStateReachableViaWiFi)
@@ -114,10 +114,23 @@ static NSString *hostName = @"www.apple.com";
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
     for (NSString *ifnam in ifs) {
         NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-        //        NSString *str = info[@"SSID"];
         BSSID = info[@"BSSID"];
     }
     return BSSID;
+}
+
+- (BOOL)isWiFiOpend
+{
+    NSCountedSet * cset = [[NSCountedSet alloc] init];
+    struct ifaddrs *interfaces;
+    if( ! getifaddrs(&interfaces) ) {
+        for( struct ifaddrs *interface = interfaces; interface; interface = interface->ifa_next) {
+            if ( (interface->ifa_flags & IFF_UP) == IFF_UP ) {
+                [cset addObject:[NSString stringWithUTF8String:interface->ifa_name]];
+            }
+        }
+    }
+    return [cset countForObject:@"awdl0"] > 1 ? YES : NO;
 }
 
 @end

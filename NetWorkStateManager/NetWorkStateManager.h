@@ -1,9 +1,9 @@
 //
 //  NetWorkStateManager.h
-//  
+//  flamegrace@hotmail.com
 //
 //  Created by Flame Grace on 16/9/19.
-//  Copyright © 2016年 . All rights reserved.
+//  Copyright © 2016年 flamegrace@hotmail.com. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -27,10 +27,9 @@ typedef NS_ENUM(NSInteger, NetWorkState) {
 
 //当前网络状态
 @property (readonly, nonatomic)  NetWorkState netWorkState;
-
 //当前的wifi标识
 @property (readonly,copy, nonatomic) NSString *wifiBSSID;
 
-
+- (BOOL)isWiFiOpend;
 
 @end

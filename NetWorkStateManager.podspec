@@ -8,13 +8,13 @@
 
 Pod::Spec.new do |s|
   s.name         = "NetWorkStateManager"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "Network state handle for iOS."
   s.homepage     = "https://github.com/FlameGrace/NetWorkStateManager"
   s.license      = "BSD"
   s.author             = { "FlameGrace" => "flamegrace@hotmail.com" }
   s.ios.deployment_target = "5.0"
-  s.source       = { :git => "https://github.com/FlameGrace/NetWorkStateManager.git", :tag => "0.0.1" }
+  s.source       = { :git => "https://github.com/FlameGrace/NetWorkStateManager.git", :tag => "0.0.2" }
   s.source_files  = "NetWorkStateManager", "NetWorkStateManager/**/*.{h,m}"
   s.public_header_files = "NetWorkStateManager/**/*.h"
 end
